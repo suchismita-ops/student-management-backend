@@ -5,9 +5,10 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the JAR in a lightweight Java 17 runtime
+# Stage 2: Run the JAR in a lightweight Java 17 runtime with render profile active by default
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+ENV SPRING_PROFILES_ACTIVE=render
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]
